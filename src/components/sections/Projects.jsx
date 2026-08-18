@@ -9,7 +9,7 @@ function ProjectCard({ project }) {
   const external = live && project.href.startsWith('http')
 
   return (
-    <Card className="group h-full transition-colors hover:border-primary/50">
+    <Card className="group h-full transition-all duration-300 hover:-translate-y-1 hover:border-primary/50">
       <CardHeader>
         <CardTitle className="flex items-start justify-between gap-3 text-lg font-semibold tracking-[-0.01em]">
           {live ? (
@@ -27,11 +27,20 @@ function ProjectCard({ project }) {
           )}
 
           {live && (
-            <ArrowUpRightIcon className="mt-1 size-4 shrink-0 text-muted-foreground transition-colors group-hover:text-signal" />
+            <ArrowUpRightIcon className="mt-1 size-4 shrink-0 text-muted-foreground transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-signal" />
           )}
         </CardTitle>
 
-        <CardDescription className="font-mono text-xs tabular-nums">{project.year}</CardDescription>
+        <CardDescription className="flex items-center gap-2.5">
+          <span className="font-mono text-xs tabular-nums">{project.year}</span>
+
+          {project.status && (
+            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-signal">
+              <span aria-hidden className="pulse-dot size-1.5 rounded-full bg-primary" />
+              {project.status}
+            </span>
+          )}
+        </CardDescription>
       </CardHeader>
 
       <CardContent className="flex flex-col gap-4">
@@ -73,7 +82,7 @@ export default function Projects() {
   return (
     <div className="grid gap-4 sm:grid-cols-2">
       {projects.items.map((project, i) => (
-        <Reveal key={project.title} delay={i * 80} className="relative">
+        <Reveal key={project.title} variant="scale" delay={i * 80} className="relative">
           <ProjectCard project={project} />
         </Reveal>
       ))}

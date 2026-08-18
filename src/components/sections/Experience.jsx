@@ -10,41 +10,43 @@ function SubHeading({ children }) {
   )
 }
 
-function Node({ current }) {
-  return (
-    <span
-      aria-hidden
-      className={`absolute top-1.5 left-0 size-2.5 rounded-full border-2 ${
-        current ? 'border-primary bg-primary' : 'border-border bg-card'
-      }`}
-    />
-  )
-}
-
 function Row({ year, title, org, current, highlights }) {
   return (
-    <div className="relative pb-9 pl-7 last:pb-0">
-      <Node current={current} />
+    <div className="timeline-row group relative pl-10">
+      {/* The node sits on the spine. The current role gets a halo that pulses,
+          so the eye lands on where he is now before reading back through. */}
+      <span
+        aria-hidden
+        className={`absolute top-1 left-0 size-3.5 -translate-x-1/2 rounded-full border-2 transition-colors duration-300 ${
+          current
+            ? 'pulse-ring border-primary bg-primary'
+            : 'border-border bg-card group-hover:border-signal'
+        }`}
+        style={{ left: '0.4375rem' }}
+      />
 
-      <p className="font-mono text-xs text-muted-foreground tabular-nums">{year}</p>
+      <p className="font-mono text-sm tracking-[0.08em] text-muted-foreground tabular-nums">
+        {year}
+      </p>
 
-      <p className="mt-1 flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
-        <span className="text-base font-semibold tracking-[-0.01em]">{title}</span>
-        <span className="text-sm text-muted-foreground">{org}</span>
+      <p className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1.5">
+        <span className="text-xl font-semibold tracking-[-0.015em] transition-colors duration-300 group-hover:text-signal sm:text-2xl">
+          {title}
+        </span>
+        <span className="text-base text-muted-foreground">{org}</span>
 
         {current && (
-          <span className="inline-flex items-center gap-1.5 text-xs font-medium text-signal">
-            <span aria-hidden className="size-1.5 rounded-full bg-primary" />
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-signal">
             Current
           </span>
         )}
       </p>
 
       {highlights?.length > 0 && (
-        <ul className="mt-2.5 flex flex-col gap-1.5">
+        <ul className="mt-3 flex flex-col gap-2">
           {highlights.map((line) => (
-            <li key={line} className="flex gap-2.5 text-sm leading-relaxed text-muted-foreground">
-              <span aria-hidden className="mt-2 size-1 shrink-0 rounded-full bg-signal" />
+            <li key={line} className="flex gap-3 text-base leading-relaxed text-muted-foreground">
+              <span aria-hidden className="mt-2.5 size-1 shrink-0 rounded-full bg-signal" />
               {line}
             </li>
           ))}
@@ -55,11 +57,16 @@ function Row({ year, title, org, current, highlights }) {
 }
 
 // Work is a sequence, so it keeps the connecting line. Education isn't one
-// any more, which is why it doesn't use this.
+// any more, which is why it doesn't use this. The spine is a gradient that
+// fades at both ends rather than a hard rule, and scales in from the top the
+// first time the track is seen.
 function Track({ children }) {
   return (
-    <div className="relative mt-6">
-      <div aria-hidden className="absolute top-2.5 bottom-3 left-1.5 w-px bg-border" />
+    // Spacing lives here rather than on the rows: each row is wrapped in its
+    // own Reveal, which makes every one of them a :last-child, so a
+    // `last:pb-0` on the row would zero the gap on all of them.
+    <div className="relative mt-8 flex flex-col gap-11">
+      <Reveal as="span" variant="spine" className="timeline-spine" aria-hidden />
       {children}
     </div>
   )
@@ -70,14 +77,14 @@ function Track({ children }) {
 // implies something is still running.
 function EducationCard() {
   return (
-    <div className="mt-6 rounded-xl border border-border bg-card/40 p-5">
+    <div className="group mt-8 rounded-xl border border-border bg-card/40 p-5 transition-colors duration-300 hover:border-signal/40">
       <div className="flex items-start gap-3.5">
-        <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-signal">
-          <GraduationCapIcon className="size-[1.15rem]" />
+        <span className="flex size-11 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-signal transition-transform duration-300 group-hover:scale-105">
+          <GraduationCapIcon className="size-5" />
         </span>
 
         <div className="min-w-0">
-          <p className="text-base font-semibold tracking-[-0.01em]">{education.degree}</p>
+          <p className="text-lg font-semibold tracking-[-0.01em]">{education.degree}</p>
           <p className="mt-0.5 text-sm text-muted-foreground">
             {education.school}, {education.location}
           </p>
@@ -99,7 +106,7 @@ function EducationCard() {
 
 export default function Experience() {
   return (
-    <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr] lg:gap-20">
+    <div className="grid gap-12 lg:grid-cols-[1.5fr_1fr] lg:gap-20">
       <div>
         <Reveal>
           <SubHeading>Work</SubHeading>
@@ -107,7 +114,7 @@ export default function Experience() {
 
         <Track>
           {roles.map((role, i) => (
-            <Reveal key={`${role.org}-${role.year}`} delay={i * 70}>
+            <Reveal key={`${role.org}-${role.year}`} variant="left" delay={i * 90}>
               <Row {...role} />
             </Reveal>
           ))}
@@ -119,7 +126,7 @@ export default function Experience() {
           <SubHeading>Education</SubHeading>
         </Reveal>
 
-        <Reveal>
+        <Reveal variant="scale">
           <EducationCard />
         </Reveal>
       </div>

@@ -26,15 +26,6 @@ export const nav = [
   { id: 'contact', label: 'Contact' },
 ]
 
-// The card in the hero. Set this to null while nothing is shippable and the
-// card renders its waiting state instead.
-export const currentProject = {
-  name: 'Investment Planner',
-  stage: 'In progress',
-  blurb: 'A tool for modelling contributions and projecting portfolio growth.',
-  href: '/investmentplanner/',
-}
-
 // `highlights` is optional. Add lines to a role and it becomes expandable in
 // the Experience list; leave it empty and the role renders as a plain row.
 export const roles = [
@@ -68,18 +59,33 @@ export const skillGroups = [
   { label: 'Tools & Workflow', items: ['Git', 'Jira', 'Confluence', 'Power Automate', 'Claude Code'] },
 ]
 
-// Add entries to `items` and the waiting state disappears on its own.
-// Each one takes: title, year, and optionally blurb, tags and href.
+// Every project lives in `items`. The one flagged `current` is also what the
+// hero card features, so the two can't drift apart as things ship. Each entry
+// takes: title, year, and optionally status, blurb, tags and href.
 //
 //   {
 //     title: 'Investment Planner',
 //     year: '2026',
+//     status: 'In progress',        // omit once it's done
 //     blurb: 'One or two lines on what it does and what you built.',
 //     tags: ['Python', 'PostgreSQL'],
-//     href: '/investmentplanner',   // omit and the card is not a link
+//     href: '/investmentplanner/',  // omit and the card is not a link
 //   }
 export const projects = {
   blurb:
     'Data tools and interactive builds. The first few are in progress and will show up here as they ship.',
-  items: [],
+  items: [
+    {
+      title: 'Investment Planner',
+      year: '2026',
+      status: 'In progress',
+      current: true,
+      blurb: 'A tool for modelling contributions and projecting portfolio growth.',
+      href: '/investmentplanner/',
+    },
+  ],
 }
+
+// The hero card. Null while nothing is in flight, and the card renders its
+// waiting state instead.
+export const currentProject = projects.items.find((project) => project.current) ?? null
