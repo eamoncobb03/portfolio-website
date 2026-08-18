@@ -1,0 +1,10 @@
+{
+  "redirects": [
+    { "source": "/investmentplanner", "destination": "/investmentplanner/", "permanent": true }
+  ],
+  "rewrites": [
+    { "source": "/investmentplanner/", "destination": "https://investment-project-eta.vercel.app/" },
+    { "source": "/investmentplanner/:path*", "destination": "https://investment-project-eta.vercel.app/:path*" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}

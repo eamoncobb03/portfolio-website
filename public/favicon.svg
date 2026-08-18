@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="9" fill="#0a0a0c"/>
+  <text x="14.5" y="16.5" text-anchor="middle" dominant-baseline="central"
+        font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14"
+        font-weight="600" letter-spacing="-0.5"
+        fill="#edeae4">EC</text>
+  <circle cx="26" cy="22" r="2.4" fill="#f0c043"/>
+</svg>

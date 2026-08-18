@@ -1,0 +1,380 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@custom-variant dark (&:is(.dark *));
+
+/* ── Terminal palette ─────────────────────────────────────────────────────
+   A quant-desk look: near-black ground, one yellow signal, mono display.
+   Dark is the design's home, but both themes are fully specified so the
+   toggle lands somewhere considered either way.
+
+   Every colour below is a shadcn semantic token, so the components in
+   components/ui pick this up with no per-component overrides. Two things
+   are worth knowing before changing them:
+
+   - `--primary` is the yellow. shadcn's `--accent` is a hover surface, not
+     a brand colour, so it stays neutral.
+   - `--signal` is yellow used as *text*. It has to be a separate token
+     because bright yellow reads fine on the dark ground but fails contrast
+     on the light one, where it drops to a burnt amber. Amber rather than a
+     darkened yellow: dark yellow lands on olive, which reads as a muddy
+     green next to the neutral greys. */
+
+:root {
+  --background: #f7f7f3;
+  --foreground: #14171b;
+
+  --card: #ffffff;
+  --card-foreground: #14171b;
+  --popover: #ffffff;
+  --popover-foreground: #14171b;
+
+  --primary: #f2c318;
+  --primary-foreground: #14171b;
+
+  --secondary: #ecece6;
+  --secondary-foreground: #14171b;
+  --muted: #ecece6;
+  /* Neutral, very slightly cool. A grey mixed toward green reads as sickly
+     against the warm ground, so the mix goes the other way. */
+  --muted-foreground: #575c64;
+  --accent: #ecece6;
+  --accent-foreground: #14171b;
+
+  --destructive: #b3261e;
+  --border: #dededa;
+  --input: #dededa;
+  --ring: #c9a00a;
+
+  /* Yellow at text scale. Burnt amber here: dark enough for small type to
+     clear 4.5:1 on the light ground, warm enough to stay in the yellow
+     family rather than sliding into olive. */
+  --signal: #a35c00;
+  /* Hairline grid on the page ground. */
+  --grid-line: rgb(20 23 27 / 0.055);
+  /* Highlighter stroke. Full-strength yellow works against the pale ground. */
+  --highlight: var(--primary);
+  /* Gloss that follows the cursor across a tilt card. Dark on the light
+     theme, light on the dark one: on a near-white card a white sheen is
+     invisible, so the light has to arrive as a soft shadow instead. */
+  --glare: rgb(20 23 27 / 0.06);
+
+  /* Brand colours for the contact links. Each needs a per-theme value:
+     LinkedIn's blue goes muddy on the dark ground, and GitHub's mark is
+     near-black on light and near-white on dark by design. */
+  --brand-email: #a35c00;
+  --brand-linkedin: #0a66c2;
+  --brand-github: #1f2328;
+
+  --chart-1: #c9a00a;
+  --chart-2: #575c64;
+  --chart-3: #878b92;
+  --chart-4: #b7bac0;
+  --chart-5: #14171b;
+
+  --radius: 0.5rem;
+
+  --sidebar: #ffffff;
+  --sidebar-foreground: #14171b;
+  --sidebar-primary: #f2c318;
+  --sidebar-primary-foreground: #14171b;
+  --sidebar-accent: #ecece6;
+  --sidebar-accent-foreground: #14171b;
+  --sidebar-border: #dededa;
+  --sidebar-ring: #c9a00a;
+
+  color-scheme: light;
+}
+
+.dark {
+  --background: #0a0d11;
+  /* Neutral near-white, not an off-white mixed toward green. At heading size
+     even a couple of points of extra green reads as a colour choice rather
+     than as white. */
+  --foreground: #e9ebee;
+
+  --card: #11151a;
+  --card-foreground: #e9ebee;
+  --popover: #11151a;
+  --popover-foreground: #e9ebee;
+
+  --primary: #f4cf3a;
+  --primary-foreground: #0a0d11;
+
+  --secondary: #1a1f26;
+  --secondary-foreground: #e9ebee;
+  --muted: #1a1f26;
+  --muted-foreground: #9aa0a8;
+  --accent: #1a1f26;
+  --accent-foreground: #e9ebee;
+
+  --destructive: #ef5350;
+  --border: rgb(255 255 255 / 0.1);
+  --input: rgb(255 255 255 / 0.14);
+  --ring: #f4cf3a;
+
+  --signal: #f4cf3a;
+  --grid-line: rgb(233 235 238 / 0.045);
+  /* Solid yellow behind white text on a near-black page is a glare. Dropped
+     to a wash so it reads as a marker stroke rather than a block. */
+  --highlight: rgb(244 207 58 / 0.28);
+  --glare: rgb(255 255 255 / 0.05);
+
+  --brand-email: #f4cf3a;
+  --brand-linkedin: #4aa3ff;
+  --brand-github: #e9ebee;
+
+  --chart-1: #f4cf3a;
+  --chart-2: #9aa0a8;
+  --chart-3: #71767e;
+  --chart-4: #474c54;
+  --chart-5: #e9ebee;
+
+  --sidebar: #11151a;
+  --sidebar-foreground: #e9ebee;
+  --sidebar-primary: #f4cf3a;
+  --sidebar-primary-foreground: #0a0d11;
+  --sidebar-accent: #1a1f26;
+  --sidebar-accent-foreground: #e9ebee;
+  --sidebar-border: rgb(255 255 255 / 0.1);
+  --sidebar-ring: #f4cf3a;
+
+  color-scheme: dark;
+}
+
+@theme inline {
+  /* San Francisco, served by the OS rather than downloaded. On Apple hardware
+     -apple-system resolves to the real SF Pro / SF Mono; elsewhere it falls
+     through to that platform's own UI face, which is the closest match
+     available and, more to the point, already installed. */
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono',
+    monospace;
+  /* shadcn's card and sheet titles reach for this. */
+  --font-heading: var(--font-sans);
+
+  --color-signal: var(--signal);
+
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    @apply font-sans;
+    /* Set here rather than on body: the grid layer below sits behind the
+       content, and a background on body would paint over it. */
+    background-color: var(--background);
+    scroll-behavior: smooth;
+    /* Anchor jumps clear the fixed header. */
+    scroll-padding-top: 5rem;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-synthesis-weight: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background: var(--primary);
+    color: var(--primary-foreground);
+  }
+}
+
+@layer components {
+  /* Scroll-in for sections. The transition lives here rather than in Tailwind
+     classes so the "hidden" and "shown" states can't drift apart across the
+     dozen places Reveal is used. */
+  .reveal {
+    opacity: 0;
+    transform: translateY(1rem);
+    transition:
+      opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .reveal[data-shown='true'] {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* A card that tilts toward the cursor with a gloss following the pointer.
+     JS drives --rx/--ry/--mx/--my/--lift directly on the element (see
+     TiltCard.jsx); this layer only owns how those variables get painted.
+
+     Two things keep it from flickering at the edges:
+
+     - The wrapper is the hover target and is never transformed. Handlers on
+       the card itself meant a tilt near an edge rotated it out from under the
+       cursor, which flattened it, which put it back under the cursor.
+     - The wrapper reaches --tilt-reach past the card, and --lift fades from 1
+       at the card's edge to 0 at that outer limit. So the boundary where
+       hover flips sits out in empty space, and by the time the pointer gets
+       there the effect has already faded to nothing. Crossing it changes
+       nothing visible, which is the only way a hover boundary stops being
+       something you can see. */
+  .tilt-wrap {
+    position: relative;
+  }
+
+  /* The reach. Absolutely positioned, so it costs no layout, and hovering it
+     counts as hovering the wrapper. Pointer devices only: on a touch screen
+     there is no hover to extend, and the overhang could push past a narrow
+     viewport. */
+  @media (hover: hover) and (pointer: fine) {
+    .tilt-wrap::before {
+      content: '';
+      position: absolute;
+      inset: calc(var(--tilt-reach, 1.5rem) * -1);
+    }
+  }
+
+  .tilt-card {
+    --rx: 0deg;
+    --ry: 0deg;
+    --mx: 50%;
+    --my: 50%;
+    --lift: 0;
+    /* The border, mixed toward the accent by the same ramp. Consumed via
+       `border-(--tilt-border)` rather than set as border-color here, because
+       a border-color utility sits in a later layer and would win. */
+    --tilt-border: color-mix(in oklch, var(--border), var(--primary) calc(var(--lift) * 55%));
+    position: relative;
+    height: 100%;
+    transform: perspective(900px) rotateX(calc(var(--rx) * var(--lift)))
+      rotateY(calc(var(--ry) * var(--lift))) scale(calc(1 + 0.012 * var(--lift)));
+    transform-style: preserve-3d;
+    /* --lift is a plain token, so it substitutes rather than interpolates.
+       The transitions on the properties that read it are what smooth it out,
+       and they all need the same duration or the parts drift apart. */
+    transition:
+      transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 0.28s ease-out;
+  }
+
+  .tilt-card-glare {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: inherit;
+    pointer-events: none;
+    /* Tied to --lift rather than :hover, so it fades with the tilt instead of
+       switching at a boundary of its own. */
+    opacity: var(--lift);
+    transition: opacity 0.28s ease-out;
+    background: radial-gradient(
+      circle at var(--mx) var(--my),
+      var(--glare) 0%,
+      transparent 45%
+    );
+  }
+
+  /* A highlighter stroke behind a word: a background band sized and
+     positioned to sit under the lower half of the glyphs, the way a real
+     highlighter misses the ascenders. A background-image rather than a
+     pseudo-element, so there's no z-index stacking to get wrong. */
+  .highlight-mark {
+    background-image: linear-gradient(var(--highlight), var(--highlight));
+    background-repeat: no-repeat;
+    background-size: 100% 0.34em;
+    background-position: 0 90%;
+    padding-inline: 0.04em;
+  }
+
+  /* The same stroke, painted on from the left on hover. Sized from 0 rather
+     than faded in, so it reads as a marker being drawn rather than a block
+     appearing. */
+  .highlight-hover {
+    background-image: linear-gradient(var(--highlight), var(--highlight));
+    background-repeat: no-repeat;
+    background-size: 0% 0.34em;
+    background-position: 0 90%;
+    padding-inline: 0.04em;
+    transition: background-size 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .group:hover .highlight-hover,
+  .highlight-hover:hover {
+    background-size: 100% 0.34em;
+  }
+
+  /* Engineering-paper grid on the page ground. Static and paint-only: no
+     animation, no backdrop-filter, so it costs nothing after first paint. */
+  .grid-ground {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+      linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+    background-size: 64px 64px;
+    -webkit-mask-image: radial-gradient(ellipse 120% 90% at 50% 0%, #000 55%, transparent 100%);
+    mask-image: radial-gradient(ellipse 120% 90% at 50% 0%, #000 55%, transparent 100%);
+    /* Forces its own GPU layer. Safari can otherwise fail to promote a
+       masked element in time for first paint and render it transparent. */
+    transform: translateZ(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
