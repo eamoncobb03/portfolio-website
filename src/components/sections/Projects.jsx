@@ -8,8 +8,10 @@ function ProjectCard({ project }) {
   const live = Boolean(project.href)
   const external = live && project.href.startsWith('http')
 
+  // The highlight rides the ring rather than a border: shadcn's Card has no
+  // border width, so a border colour on hover renders nothing at all.
   return (
-    <Card className="group h-full transition-all duration-300 hover:-translate-y-1 hover:border-primary/50">
+    <Card className="group h-full transition-all duration-300 hover:-translate-y-1 hover:ring-primary/50">
       <CardHeader>
         <CardTitle className="flex items-start justify-between gap-3 text-lg font-semibold tracking-[-0.01em]">
           {live ? (

@@ -76,7 +76,7 @@ function ContactCard({ icon: Icon, label, value, href, external, brand, action }
       // The brand colour is scoped to the card as a variable so the icon, its
       // tile tint and the hover border all read from one value.
       style={{ '--brand': `var(${brand})` }}
-      className="group relative flex items-center gap-3.5 rounded-xl border border-border bg-card/40 p-4 transition-colors hover:border-(--brand) hover:bg-card"
+      className="group relative flex items-center gap-3.5 rounded-xl border border-border bg-card/40 p-4 transition-all duration-300 hover:-translate-y-1 hover:border-(--brand) hover:bg-card"
     >
       <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-(--brand)/10 text-(--brand)">
         <Icon className="size-[1.15rem]" />
@@ -96,7 +96,7 @@ function ContactCard({ icon: Icon, label, value, href, external, brand, action }
       </span>
 
       {action ?? (
-        <ArrowUpRightIcon className="size-4 shrink-0 text-muted-foreground transition-colors group-hover:text-(--brand)" />
+        <ArrowUpRightIcon className="size-4 shrink-0 text-muted-foreground transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-(--brand)" />
       )}
     </div>
   )
