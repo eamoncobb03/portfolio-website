@@ -2,8 +2,14 @@ import Container from './Container'
 import Reveal from '@/components/Reveal'
 
 export default function Section({ id, index, label, title, children }) {
+  // The negative scroll-margin mirrors the padding beside it, and has to: a
+  // jumped-to section otherwise lands with its whole top padding pushed into
+  // view, which drops the heading toward the middle of the screen and shoves
+  // the content below the fold. Cancelling the padding means an anchor jump
+  // lands on the section's index rule at exactly scroll-padding-top, at any
+  // breakpoint. Keep the two in step if either changes.
   return (
-    <section id={id} className="scroll-mt-20 py-20 md:py-28">
+    <section id={id} className="-scroll-mt-20 py-20 md:-scroll-mt-28 md:py-28">
       <Container>
         <Reveal as="header">
           {/* The divider, the index and the heading read as one mark rather

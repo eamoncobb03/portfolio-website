@@ -211,8 +211,10 @@
        content, and a background on body would paint over it. */
     background-color: var(--background);
     scroll-behavior: smooth;
-    /* Anchor jumps clear the fixed header. */
-    scroll-padding-top: 5rem;
+    /* Where an anchor jump lands: the 4rem header plus room to breathe. The
+       sections cancel their own top padding (see Section.jsx) so this is the
+       only thing deciding it. */
+    scroll-padding-top: 6rem;
   }
 
   body {
