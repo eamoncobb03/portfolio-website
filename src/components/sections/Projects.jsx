@@ -12,6 +12,20 @@ function ProjectCard({ project }) {
   // border width, so a border colour on hover renders nothing at all.
   return (
     <Card className="group h-full transition-all duration-300 hover:-translate-y-1 hover:ring-primary/50">
+      {project.preview && (
+        // Card already knows how to seat a leading image (drops its own top
+        // padding, rounds this to match), so it just has to be the first
+        // child. The stretched link in CardTitle below covers the whole
+        // card, this included, so the image is part of the same click
+        // target rather than a dead zone above it.
+        <img
+          src={project.preview}
+          alt={`${project.title} preview`}
+          loading="lazy"
+          className="aspect-[1200/886] w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+        />
+      )}
+
       <CardHeader>
         <CardTitle className="flex items-start justify-between gap-3 text-lg font-semibold tracking-[-0.01em]">
           {live ? (

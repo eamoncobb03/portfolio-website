@@ -1,5 +1,11 @@
 // All site copy lives here. Components just render it.
 
+// The one non-text asset that lives here rather than beside its component:
+// a project preview has to be imported (not just referenced by path) so
+// Vite fingerprints and bundles it, and content.js is where the project it
+// belongs to is already defined.
+import investmentPlannerPreview from '@/assets/investment-planner-preview.webp'
+
 export const site = {
   firstName: 'Eamon',
   lastName: 'Cobb',
@@ -61,15 +67,16 @@ export const skillGroups = [
 
 // Every project lives in `items`. The one flagged `current` is also what the
 // hero card features, so the two can't drift apart as things ship. Each entry
-// takes: title, year, and optionally status, blurb, tags and href.
+// takes: title, year, and optionally status, blurb, tags, href and preview.
 //
 //   {
 //     title: 'Investment Planner',
 //     year: '2026',
-//     status: 'In progress',        // omit once it's done
+//     status: 'In progress',          // omit once it's done
 //     blurb: 'One or two lines on what it does and what you built.',
 //     tags: ['Python', 'PostgreSQL'],
-//     href: '/investmentplanner/',  // omit and the card is not a link
+//     href: '/investmentplanner/',    // omit and the card is not a link
+//     preview: investmentPlannerPreview, // omit and the card shows no image
 //   }
 export const projects = {
   blurb:
@@ -82,6 +89,7 @@ export const projects = {
       current: true,
       blurb: 'A tool for modelling contributions and projecting portfolio growth.',
       href: '/investmentplanner/',
+      preview: investmentPlannerPreview,
     },
   ],
 }
