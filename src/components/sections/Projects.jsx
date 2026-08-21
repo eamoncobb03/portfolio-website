@@ -22,7 +22,13 @@ function ProjectCard({ project }) {
           src={project.preview}
           alt={`${project.title} preview`}
           loading="lazy"
-          className="aspect-[1200/886] w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+          // A fixed height rather than an aspect ratio: any ratio scales with
+          // the card's own width, and on a wide card that meant the image
+          // outweighed the two or three lines of text below it regardless of
+          // which ratio was picked. This holds it to roughly the same weight
+          // as that text at any card width, so it reads as a preview rather
+          // than a banner.
+          className="h-36 w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
         />
       )}
 
