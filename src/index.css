@@ -47,25 +47,28 @@
   --input: #dededa;
   --ring: #c9a00a;
 
-  /* Yellow at text scale. Burnt amber here: dark enough for small type to
-     clear 4.5:1 on the light ground, warm enough to stay in the yellow
-     family rather than sliding into olive. */
-  --signal: #a35c00;
+  /* Yellow reads too muddy at text scale on the light ground (it either
+     fails contrast or slides toward brown/olive to fix it), so text uses
+     a slate grey instead. */
+  --signal: #3f4750;
   /* Hairline grid on the page ground. */
   --grid-line: rgb(20 23 27 / 0.055);
   /* Highlighter stroke. Full-strength yellow works against the pale ground. */
   --highlight: var(--primary);
+  /* Cool third accent, tried out as a status colour so it reads as
+     "live/active" rather than competing with the yellow brand colour. */
+  --info: #2f6fed;
   /* Gloss that follows the cursor across a tilt card. Dark on the light
      theme, light on the dark one: on a near-white card a white sheen is
      invisible, so the light has to arrive as a soft shadow instead. */
   --glare: rgb(20 23 27 / 0.06);
 
-  /* Brand colours for the contact links. Each needs a per-theme value:
-     LinkedIn's blue goes muddy on the dark ground, and GitHub's mark is
-     near-black on light and near-white on dark by design. */
-  --brand-email: #a35c00;
+  /* Brand colours for the contact links. GitHub's mark stays dark charcoal
+     in both themes rather than flipping to near-white on dark, and LinkedIn
+     keeps its real brand blue in both. */
+  --brand-email: #d1392b;
   --brand-linkedin: #0a66c2;
-  --brand-github: #1f2328;
+  --brand-github: #181717;
 
   --chart-1: #c9a00a;
   --chart-2: #575c64;
@@ -119,11 +122,12 @@
   /* Solid yellow behind white text on a near-black page is a glare. Dropped
      to a wash so it reads as a marker stroke rather than a block. */
   --highlight: rgb(244 207 58 / 0.28);
+  --info: #4a8dff;
   --glare: rgb(255 255 255 / 0.05);
 
-  --brand-email: #f4cf3a;
-  --brand-linkedin: #4aa3ff;
-  --brand-github: #e9ebee;
+  --brand-email: #ef5350;
+  --brand-linkedin: #0a66c2;
+  --brand-github: #4a5058;
 
   --chart-1: #f4cf3a;
   --chart-2: #9aa0a8;
@@ -158,6 +162,7 @@
   --font-heading: var(--font-sans);
 
   --color-signal: var(--signal);
+  --color-info: var(--info);
 
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);

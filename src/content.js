@@ -10,7 +10,7 @@ export const site = {
   firstName: 'Eamon',
   lastName: 'Cobb',
   eyebrow: 'Data & Analytics',
-  bio: 'Mathematics at Queen’s University, now a Data Analyst at TechInsights in Ottawa.',
+  bio: 'Mathematics at Queen’s University, now a Data Analyst at TechInsights.',
   status: 'Currently at TechInsights',
   location: 'Ottawa, ON',
   email: 'eamoncobb2003@gmail.com',

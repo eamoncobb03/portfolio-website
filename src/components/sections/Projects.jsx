@@ -57,8 +57,8 @@ function ProjectCard({ project }) {
           <span className="font-mono text-xs tabular-nums">{project.year}</span>
 
           {project.status && (
-            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-signal">
-              <span aria-hidden className="pulse-dot size-1.5 rounded-full bg-primary" />
+            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-info">
+              <span aria-hidden className="pulse-dot size-1.5 rounded-full bg-info" />
               {project.status}
             </span>
           )}
