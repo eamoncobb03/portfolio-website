@@ -1,4 +1,4 @@
-import { ArrowRightIcon, ArrowUpRightIcon } from 'lucide-react'
+import { ArrowRightIcon, ArrowUpRightIcon, ChevronDownIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Container from '@/components/layout/Container'
 import Reveal from '@/components/Reveal'
@@ -48,7 +48,7 @@ function CurrentProjectCard() {
 
 export default function Hero() {
   return (
-    <section className="flex min-h-svh items-center pt-16">
+    <section className="relative flex min-h-svh items-center pt-16">
       <Container className="grid items-center gap-12 py-20 md:grid-cols-[1.15fr_0.85fr] md:gap-16">
         <div>
           <Reveal variant="mask">
@@ -99,6 +99,15 @@ export default function Hero() {
           <CurrentProjectCard />
         </Reveal>
       </Container>
+
+      <a
+        href="#experience"
+        aria-label="Scroll to experience"
+        className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-muted-foreground transition-colors hover:text-signal md:flex"
+      >
+        <span className="text-xs tracking-[0.16em] uppercase">Scroll</span>
+        <ChevronDownIcon className="size-4 animate-bounce" />
+      </a>
     </section>
   )
 }

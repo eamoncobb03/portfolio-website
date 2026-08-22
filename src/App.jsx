@@ -23,19 +23,19 @@ export default function App() {
       <Hero />
 
       <main>
-        <Section id="experience" index={1} label="Experience" title="Where I’ve worked and what I studied.">
+        <Section id="experience" index={1} label="Experience" title="My professional experience.">
           <Experience />
         </Section>
 
-        <Section id="projects" index={2} label="Projects" title="Things I’m building outside of work.">
+        <Section id="projects" index={2} label="Projects" title="Interesting and fun ideas I am working on.">
           <Projects />
         </Section>
 
-        <Section id="skills" index={3} label="Skills" title="The tools I reach for.">
+        <Section id="skills" index={3} label="Skills">
           <Skills />
         </Section>
 
-        <Section id="contact" index={4} label="Contact" title="Open to interesting problems and good teams.">
+        <Section id="contact" index={4} label="Contact" title="Open to new opportunities and teams.">
           <Contact />
         </Section>
       </main>
