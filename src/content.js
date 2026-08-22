@@ -79,8 +79,7 @@ export const skillGroups = [
 //     preview: investmentPlannerPreview, // omit and the card shows no image
 //   }
 export const projects = {
-  blurb:
-    'Data tools and interactive builds. The first few are in progress and will show up here as they ship.',
+  blurb: 'Data tools and interactive builds. More will show up here as they ship.',
   items: [
     {
       title: 'Investment Planner',
