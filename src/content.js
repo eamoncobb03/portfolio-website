@@ -72,7 +72,7 @@ export const skillGroups = [
 //   {
 //     title: 'Investment Planner',
 //     year: '2026',
-//     status: 'In progress',          // omit once it's done
+//     status: 'Live',                 // or 'In progress'; omit for neither
 //     blurb: 'One or two lines on what it does and what you built.',
 //     tags: ['Python', 'PostgreSQL'],
 //     href: '/investmentplanner/',    // omit and the card is not a link
@@ -85,9 +85,10 @@ export const projects = {
     {
       title: 'Investment Planner',
       year: '2026',
-      status: 'In progress',
+      status: 'Live',
       current: true,
-      blurb: 'A tool for modelling contributions and projecting portfolio growth.',
+      blurb:
+        'A tool for modelling contributions and projecting portfolio growth, with a Monte Carlo mode that runs ten thousand futures to show the range of outcomes.',
       href: '/investmentplanner/',
       preview: investmentPlannerPreview,
     },
