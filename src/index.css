@@ -502,25 +502,21 @@
      to bloom into, so the light theme keeps its own consistent treatment,
      weight and a crisp edge, rather than a weak imitation of this one. */
 
-  /* Every accent-coloured piece of text on the site: section numbers, the hero
-     eyebrow, the full stop after the wordmark, status pills, the copy tick. */
-  .dark .text-signal {
+  /* Light that is always on belongs to the chrome and the hero, the two places
+     whose job is to make an impression. Inside the content sections a glow has
+     to be earned by interaction, so reading down the page stays calm and the
+     lit things are the ones you can act on.
+     [data-glow] marks the two zones, so this stays one rule to reason about
+     rather than a judgement call per component. */
+  .dark [data-glow] .text-signal {
     text-shadow: var(--glow-text);
   }
 
-  /* Icons are shapes, not glyphs, so a text-shadow does nothing for them. */
-  .dark svg.text-signal,
-  .dark .text-signal > svg {
-    filter: drop-shadow(0 0 5px rgb(244 207 58 / 0.5));
-  }
-
-  /* The arrows and titles that only turn accent-coloured on hover. Escaped
-     because that is the literal class name Tailwind emits, and matching it is
-     what keeps these in step with the static accents above. */
-  .dark .group:hover .group-hover\:text-signal {
-    text-shadow: var(--glow-text);
-    filter: drop-shadow(0 0 5px rgb(244 207 58 / 0.5));
-  }
+  /* Deliberately not lighting icons, and not lighting text that merely turns
+     accent-coloured on hover. Both were tried: a glow on a shape reads as a
+     blur rather than a light, and blooming a whole job title on hover made the
+     experience list flash as the pointer crossed it. Colour alone carries both
+     of those; the glow stays for markers and for things you can press. */
 
   /* The yellow call to action should look like it is emitting the light the
      rest of the page reflects. */

@@ -48,7 +48,7 @@ function CurrentProjectCard() {
 
 export default function Hero() {
   return (
-    <section className="relative flex min-h-svh items-center pt-16">
+    <section data-glow className="relative flex min-h-svh items-center pt-16">
       <Container className="grid items-center gap-12 py-20 md:grid-cols-[1.15fr_0.85fr] md:gap-16">
         <div>
           <Reveal variant="mask">

@@ -46,6 +46,7 @@ export default function Header() {
 
   return (
     <header
+      data-glow
       data-scrolled={scrolled || undefined}
       className="fixed inset-x-0 top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-md transition-shadow duration-500 data-scrolled:shadow-[0_1px_0_0_var(--glow-line),0_8px_30px_-12px_var(--glow-cast)]"
     >
