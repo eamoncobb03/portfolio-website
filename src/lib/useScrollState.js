@@ -1,25 +1,61 @@
 import { useEffect, useState } from 'react'
 
 /**
- * How far down the page we are, 0 to 1, plus whether we have left the very top.
+ * Everything the header reads off the scroll position: how far down the page we
+ * are, whether we have left the very top, and which section is being read.
  *
- * Read off a scroll listener rather than a CSS scroll-driven animation: those
- * are still Chromium-only, and where they are unsupported the progress bar
- * would sit silently at zero rather than degrade to something sensible.
+ * All three come from one listener and one pass, because they are the same
+ * question asked three ways and splitting them meant two listeners measuring
+ * the same scroll.
  *
- * The listener only stores a number and lets React paint it; there is no layout
- * read per event beyond scrollY and two cached document heights, so it stays
- * cheap without needing to be throttled.
+ * The active section is worked out from geometry rather than from an
+ * IntersectionObserver. The observer version flickered badly: its callback is
+ * handed only the entries whose intersection *changed*, not every section being
+ * watched, so choosing "the one nearest the top" from that argument picks from
+ * a partial set. A section that merely twitched at the edge of the viewport
+ * would win over the one actually on screen, and the underline flipped
+ * backwards as you scrolled.
+ *
+ * Reading position directly cannot do that. Sections are walked in document
+ * order and the last one whose top has crossed the marker wins, so the answer
+ * only ever moves forward as you scroll down and back as you scroll up.
  */
-export function useScrollProgress() {
-  const [progress, setProgress] = useState(0)
-  const [scrolled, setScrolled] = useState(false)
+export function useHeaderState(ids) {
+  const [state, setState] = useState({ progress: 0, scrolled: false, active: null })
 
   useEffect(() => {
     const read = () => {
-      const max = document.documentElement.scrollHeight - window.innerHeight
-      setProgress(max > 0 ? Math.min(window.scrollY / max, 1) : 0)
-      setScrolled(window.scrollY > 8)
+      const doc = document.documentElement
+      const max = doc.scrollHeight - window.innerHeight
+      const progress = max > 0 ? Math.min(window.scrollY / max, 1) : 0
+
+      // A third of the way down the viewport, and never closer than the
+      // header's own height: a section becomes current once its heading has
+      // properly arrived, not while it is still hidden behind the bar.
+      const marker = Math.max(96, window.innerHeight * 0.32)
+
+      let active = null
+      for (const id of ids) {
+        const el = document.getElementById(id)
+        if (el && el.getBoundingClientRect().top <= marker) active = id
+      }
+
+      // The final section is short enough that the page runs out of scroll
+      // before its top can reach the marker, so on its own the rule above would
+      // never light it. Once the remaining scroll is less than the distance it
+      // still has to travel, it can no longer get there by scrolling, and
+      // whatever is pinned at the end of the page is what is being read.
+      const last = document.getElementById(ids[ids.length - 1])
+      if (last && max > 0) {
+        const short = last.getBoundingClientRect().top - marker
+        if (short > 0 && short >= max - window.scrollY) active = ids[ids.length - 1]
+      }
+
+      setState((prev) =>
+        prev.progress === progress && prev.active === active && prev.scrolled === window.scrollY > 8
+          ? prev
+          : { progress, active, scrolled: window.scrollY > 8 },
+      )
     }
 
     read()
@@ -29,43 +65,7 @@ export function useScrollProgress() {
       window.removeEventListener('scroll', read)
       window.removeEventListener('resize', read)
     }
-  }, [])
-
-  return { progress, scrolled }
-}
-
-/**
- * Which section is currently being read.
- *
- * Picks the entry closest to the top of the viewport rather than simply the
- * first one intersecting, because with a tall section above a short one both
- * are on screen at once and "first" flickers between them as you scroll. The
- * root margin pulls the decision line down under the fixed header, so a section
- * counts as current once its heading clears the bar rather than while it is
- * still hidden behind it.
- */
-export function useActiveSection(ids) {
-  const [active, setActive] = useState(null)
-
-  useEffect(() => {
-    const sections = ids.map((id) => document.getElementById(id)).filter(Boolean)
-    if (!sections.length) return
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries.filter((e) => e.isIntersecting)
-        if (!visible.length) return
-        const nearest = visible.reduce((best, e) =>
-          Math.abs(e.boundingClientRect.top) < Math.abs(best.boundingClientRect.top) ? e : best,
-        )
-        setActive(nearest.target.id)
-      },
-      { rootMargin: '-72px 0px -55% 0px', threshold: [0, 0.25, 0.5] },
-    )
-
-    sections.forEach((s) => observer.observe(s))
-    return () => observer.disconnect()
   }, [ids])
 
-  return active
+  return state
 }

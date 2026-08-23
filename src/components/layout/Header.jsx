@@ -12,7 +12,7 @@ import {
 import ThemeToggle from '@/components/ThemeToggle'
 import Container from './Container'
 import { nav, site } from '@/content'
-import { useActiveSection, useScrollProgress } from '@/lib/useScrollState'
+import { useHeaderState } from '@/lib/useScrollState'
 
 const SECTION_IDS = nav.map((item) => item.id)
 
@@ -42,8 +42,7 @@ function Wordmark({ className }) {
 
 export default function Header() {
   const [open, setOpen] = useState(false)
-  const { progress, scrolled } = useScrollProgress()
-  const active = useActiveSection(SECTION_IDS)
+  const { progress, scrolled, active } = useHeaderState(SECTION_IDS)
 
   return (
     <header
