@@ -40,16 +40,17 @@ export function useHeaderState(ids) {
         if (el && el.getBoundingClientRect().top <= marker) active = id
       }
 
-      // The final section is short enough that the page runs out of scroll
-      // before its top can reach the marker, so on its own the rule above would
-      // never light it. Once the remaining scroll is less than the distance it
-      // still has to travel, it can no longer get there by scrolling, and
-      // whatever is pinned at the end of the page is what is being read.
-      const last = document.getElementById(ids[ids.length - 1])
-      if (last && max > 0) {
-        const short = last.getBoundingClientRect().top - marker
-        if (short > 0 && short >= max - window.scrollY) active = ids[ids.length - 1]
-      }
+      // On a tall window the last section is short enough that the page runs
+      // out of scroll before its top can reach the marker, so the rule above
+      // would never light it. Hitting the bottom is what lights it instead.
+      //
+      // This has to be a test on scroll position and nothing else. Comparing
+      // the distance the section still had to travel against the scroll
+      // remaining looks like it says the same thing, but scrollY cancels out of
+      // both sides: it reduces to a constant for a given layout, true at every
+      // position or none, which on a tall viewport pinned this section on from
+      // the very top of the page.
+      if (max > 0 && max - window.scrollY <= 2) active = ids[ids.length - 1]
 
       setState((prev) =>
         prev.progress === progress && prev.active === active && prev.scrolled === window.scrollY > 8
