@@ -6,7 +6,7 @@ function Skill({ name }) {
   const Icon = skillIcons[name]
 
   return (
-    <span className="inline-flex items-center gap-2 rounded-lg border border-border bg-card/40 py-1.5 pr-3 pl-2.5 text-sm whitespace-nowrap">
+    <span className="skill-chip inline-flex items-center gap-2 rounded-lg border border-border bg-card/40 py-1.5 pr-3 pl-2.5 text-sm whitespace-nowrap">
       {Icon && <Icon className="size-[1.15em] shrink-0 text-signal" />}
       {name}
     </span>

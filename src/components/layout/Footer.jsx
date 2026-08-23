@@ -11,14 +11,14 @@ export default function Footer() {
         </span>
 
         <div className="flex items-center gap-6">
-          <a href={`mailto:${site.email}`} className="transition-colors hover:text-foreground">
+          <a href={`mailto:${site.email}`} className="footer-link transition-colors hover:text-foreground">
             Email
           </a>
           <a
             href={site.linkedin.url}
             target="_blank"
             rel="noreferrer"
-            className="transition-colors hover:text-foreground"
+            className="footer-link transition-colors hover:text-foreground"
           >
             LinkedIn
           </a>
@@ -26,7 +26,7 @@ export default function Footer() {
             href={site.github.url}
             target="_blank"
             rel="noreferrer"
-            className="transition-colors hover:text-foreground"
+            className="footer-link transition-colors hover:text-foreground"
           >
             GitHub
           </a>

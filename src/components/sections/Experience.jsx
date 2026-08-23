@@ -77,7 +77,7 @@ function Track({ children }) {
 // implies something is still running.
 function EducationCard() {
   return (
-    <div className="group mt-8 rounded-xl border border-border bg-card/40 p-5 transition-colors duration-300 hover:border-signal/40">
+    <div className="glow-card group mt-8 rounded-xl border border-border bg-card/40 p-5 transition-colors duration-300 hover:border-signal/40">
       <div className="flex items-start gap-3.5">
         <span className="flex size-11 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-signal transition-transform duration-300 group-hover:scale-105">
           <GraduationCapIcon className="size-5" />

@@ -19,7 +19,7 @@ function CurrentProjectCard() {
   return (
     <TiltCard
       {...linkProps}
-      className="rounded-2xl border border-(--tilt-border) bg-card p-6"
+      className="glow-card rounded-2xl border border-(--tilt-border) bg-card p-6"
     >
       <div className="flex items-center gap-2.5">
         <span aria-hidden className="pulse-dot size-1.5 rounded-full bg-primary" />

@@ -11,7 +11,7 @@ function ProjectCard({ project }) {
   // The highlight rides the ring rather than a border: shadcn's Card has no
   // border width, so a border colour on hover renders nothing at all.
   return (
-    <Card className="group h-full transition-all duration-300 hover:-translate-y-1 hover:ring-primary/50">
+    <Card className="glow-card group h-full transition-all duration-300 hover:-translate-y-1 hover:ring-primary/50">
       {project.preview && (
         // Card already knows how to seat a leading image (drops its own top
         // padding, rounds this to match), so it just has to be the first

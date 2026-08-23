@@ -76,7 +76,7 @@ function ContactCard({ icon: Icon, label, value, href, external, brand, action }
       // The brand colour is scoped to the card as a variable so the icon, its
       // tile tint and the hover border all read from one value.
       style={{ '--brand': `var(${brand})` }}
-      className="group relative flex items-center gap-3.5 rounded-xl border border-border bg-(--brand)/35 p-4 transition-all duration-300 hover:-translate-y-1 hover:border-(--brand) hover:bg-(--brand)/50"
+      className="glow-card group relative flex items-center gap-3.5 rounded-xl border border-border bg-(--brand)/35 p-4 transition-all duration-300 hover:-translate-y-1 hover:border-(--brand) hover:bg-(--brand)/50"
     >
       <span className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-(--brand)/30 bg-background text-(--brand)">
         <Icon className="size-[1.15rem]" />

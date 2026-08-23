@@ -492,6 +492,111 @@
     padding-inline: 0.04em;
   }
 
+  /* ── Glow system ────────────────────────────────────────────────────────
+     Applied off the classes the components already use rather than by hand,
+     one component at a time. A lit accent here and an unlit one two sections
+     down reads as a bug, and the only way to be sure that never happens is for
+     a single rule to own every case.
+
+     Everything here is scoped to .dark. On the pale ground a halo has nothing
+     to bloom into, so the light theme keeps its own consistent treatment,
+     weight and a crisp edge, rather than a weak imitation of this one. */
+
+  /* Every accent-coloured piece of text on the site: section numbers, the hero
+     eyebrow, the full stop after the wordmark, status pills, the copy tick. */
+  .dark .text-signal {
+    text-shadow: var(--glow-text);
+  }
+
+  /* Icons are shapes, not glyphs, so a text-shadow does nothing for them. */
+  .dark svg.text-signal,
+  .dark .text-signal > svg {
+    filter: drop-shadow(0 0 5px rgb(244 207 58 / 0.5));
+  }
+
+  /* The arrows and titles that only turn accent-coloured on hover. Escaped
+     because that is the literal class name Tailwind emits, and matching it is
+     what keeps these in step with the static accents above. */
+  .dark .group:hover .group-hover\:text-signal {
+    text-shadow: var(--glow-text);
+    filter: drop-shadow(0 0 5px rgb(244 207 58 / 0.5));
+  }
+
+  /* The yellow call to action should look like it is emitting the light the
+     rest of the page reflects. */
+  .dark :is(button, a).bg-primary {
+    box-shadow: 0 0 18px -4px rgb(244 207 58 / 0.5);
+    transition:
+      box-shadow 240ms ease,
+      background-color 200ms ease;
+  }
+
+  .dark :is(button, a).bg-primary:hover {
+    box-shadow: 0 0 26px -2px rgb(244 207 58 / 0.7);
+  }
+
+  /* Keyboard focus is an accent state too, and was the one place still using
+     a flat ring while everything around it lit up. */
+  .dark :focus-visible {
+    box-shadow: 0 0 0 1px var(--ring), 0 0 16px -2px rgb(244 207 58 / 0.55);
+  }
+
+  /* Any raised card: projects, contact, experience, the hero tilt card. One
+     class on each rather than four near-identical hover rules.
+
+     drop-shadow rather than box-shadow, because the project card draws its
+     edge with Tailwind's `ring-1`, which is itself a box-shadow. Utilities sit
+     in a later cascade layer than this one, so a box-shadow here loses to that
+     ring no matter how specific it is, and the glow silently never appeared.
+     A filter is a different property entirely, so the two compose, and it
+     follows the card's rounded outline rather than its box. */
+  .glow-card {
+    transition:
+      filter 300ms ease,
+      transform 300ms ease,
+      border-color 300ms ease;
+  }
+
+  .dark .glow-card:hover,
+  .dark .group:hover > .glow-card {
+    filter: drop-shadow(0 0 12px var(--glow-cast));
+  }
+
+  /* Skills chips had no hover state at all, which made them the one inert
+     surface on a page where everything else responds. */
+  .skill-chip {
+    transition:
+      border-color 220ms ease,
+      background-color 220ms ease,
+      box-shadow 220ms ease,
+      transform 220ms ease;
+  }
+
+  .skill-chip:hover {
+    transform: translateY(-1px);
+    border-color: color-mix(in oklch, var(--border), var(--primary) 55%);
+  }
+
+  .dark .skill-chip:hover {
+    box-shadow: 0 0 16px -4px var(--glow-cast);
+  }
+
+  /* The marker stroke under the surname, and the one the wordmark draws on
+     hover, both sit under bright text and can carry a soft bloom. */
+  .dark :is(.highlight-mark, .highlight-sweep, .highlight-hover) {
+    filter: drop-shadow(0 1px 6px rgb(244 207 58 / 0.25));
+  }
+
+  /* The footer was the last place where hovering just changed a colour. */
+  .dark .footer-link:hover {
+    text-shadow: var(--glow-text);
+  }
+
+  /* The pulsing "current" markers read as lit rather than merely coloured. */
+  .dark :is(.pulse-dot, .pulse-ring) {
+    box-shadow: 0 0 8px var(--glow-cast);
+  }
+
   /* ── Header ─────────────────────────────────────────────────────────────
      A nav item lights up rather than merely changing colour. The ::after is
      the underline; the text-shadow is the bloom, and both only mean anything
