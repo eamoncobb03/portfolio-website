@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
+import { flushSync } from 'react-dom'
 
 const STORAGE_KEY = 'portfolio-theme'
 // Must match --background in index.css, or the iOS status bar colour drifts.
@@ -31,15 +32,55 @@ export function ThemeProvider({ children }) {
       ?.setAttribute('content', BG[theme])
   }, [theme])
 
-  // Used to be a circle wipe via the View Transitions API. Pulled it: it was
-  // the only custom compositing effect left on the site, and it was the
-  // thing breaking in both Chrome (fighting the per-element colour
-  // transitions underneath it) and Safari. A plain instant flip has nothing
-  // left to go wrong, and the transition-colors classes already on most
-  // components give it a soft crossfade for free.
-  const toggle = () => {
+  /**
+   * Repaints the page under a circular wipe spreading from wherever the toggle
+   * was pressed.
+   *
+   * This effect existed once before and was pulled, because it fought the
+   * `transition-colors` sitting on most components: the View Transition holds a
+   * still image of the old theme while every element underneath is separately
+   * easing towards the new one, and the two disagree for the whole animation.
+   * The `theme-switching` class is what makes it work this time. It kills every
+   * transition on the page for the length of the wipe, so the elements flip
+   * instantly and the circle is the only thing moving.
+   *
+   * Falls back to the plain flip wherever the API is missing (Firefox today) or
+   * the visitor asked for less motion, which is the behaviour this replaces
+   * rather than something worse.
+   */
+  const toggle = (event) => {
     hasChosen.current = true
-    setTheme((t) => (t === 'dark' ? 'light' : 'dark'))
+    const next = theme === 'dark' ? 'light' : 'dark'
+    const root = document.documentElement
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduced || !document.startViewTransition) {
+      setTheme(next)
+      return
+    }
+
+    // The press point, so the circle opens from under the visitor's finger
+    // rather than from an arbitrary corner. Falls back to the toggle's own
+    // place in the header when there is no pointer, e.g. keyboard activation.
+    const source = event?.currentTarget?.getBoundingClientRect?.()
+    const x = event?.clientX || (source ? source.left + source.width / 2 : window.innerWidth - 40)
+    const y = event?.clientY || (source ? source.top + source.height / 2 : 40)
+
+    // Far enough to cover the furthest corner from that point.
+    const reach = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y))
+
+    root.style.setProperty('--wipe-x', `${x}px`)
+    root.style.setProperty('--wipe-y', `${y}px`)
+    root.style.setProperty('--wipe-r', `${reach}px`)
+    root.classList.add('theme-switching')
+
+    const transition = document.startViewTransition(() => {
+      // Synchronous, because the callback has to leave the DOM already in its
+      // new state before the API takes its second snapshot.
+      flushSync(() => setTheme(next))
+    })
+
+    transition.finished.finally(() => root.classList.remove('theme-switching'))
   }
 
   return (

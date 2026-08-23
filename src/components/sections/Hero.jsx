@@ -59,24 +59,31 @@ export default function Hero() {
 
           {/* Each line wipes up from behind its own clip, one after the other,
               which is why the name is split across two Reveals rather than
-              being one block with a <br>. */}
+              being one block with a <br>.
+
+              The highlight under the surname is drawn on afterwards rather than
+              arriving with it: the stroke sweeps left to right once the line
+              has settled, so it reads as the name being marked rather than as
+              text that happened to come with a yellow box behind it. Its delay
+              is the sum of the ones above it, which is why it is spelled out
+              here instead of being another Reveal. */}
           <h1 className="mt-5 text-[clamp(3.25rem,9vw,7rem)] leading-[0.92] font-bold tracking-[-0.045em]">
             <Reveal variant="mask" delay={90}>
               {site.firstName}
             </Reveal>
             <Reveal variant="mask" delay={180}>
-              <span className="highlight-mark">{site.lastName}</span>
-              <span className="text-signal">.</span>
+              <span className="highlight-sweep">{site.lastName}</span>
+              <span className="text-signal hero-dot">.</span>
             </Reveal>
           </h1>
 
-          <Reveal delay={340}>
+          <Reveal delay={420}>
             <p className="mt-6 max-w-md text-lg leading-relaxed text-muted-foreground text-pretty">
               {site.bio}
             </p>
           </Reveal>
 
-          <Reveal delay={420}>
+          <Reveal delay={520}>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Button asChild size="lg" className="group/cta h-11 px-5">
                 <a href="#experience">
@@ -95,7 +102,7 @@ export default function Hero() {
           </Reveal>
         </div>
 
-        <Reveal variant="scale" delay={260}>
+        <Reveal variant="scale" delay={640}>
           <CurrentProjectCard />
         </Reveal>
       </Container>
