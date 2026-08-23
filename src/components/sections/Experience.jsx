@@ -79,7 +79,11 @@ function EducationCard() {
   return (
     <div className="glow-card group mt-8 rounded-xl border border-border bg-card/40 p-5 transition-colors duration-300 hover:border-signal/40">
       <div className="flex items-start gap-3.5">
-        <span className="flex size-11 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-signal transition-transform duration-300 group-hover:scale-105">
+        {/* Same tile the contact cards use: a hairline accent border over the
+            page ground. The previous fill was the accent at a tenth strength,
+            which over a near-black ground mixes to olive rather than to a
+            paler yellow, and read as a dirty square. */}
+        <span className="border-signal/30 bg-background text-signal flex size-11 shrink-0 items-center justify-center rounded-lg border transition-transform duration-300 group-hover:scale-105">
           <GraduationCapIcon className="size-5" />
         </span>
 
@@ -91,14 +95,17 @@ function EducationCard() {
         </div>
       </div>
 
-      <div className="mt-5 flex items-center justify-between gap-3 border-t border-border/60 pt-3.5">
-        <span className="font-mono text-xs text-muted-foreground tabular-nums">
+      {/* No dot and no accent on this row. A filled dot is how the rest of the
+          site says "live" — the current role, the project in flight — and a
+          finished degree is the one thing here that is definitively not. The
+          year is dropped too: it is already the back half of the range beside
+          it, and repeating it in the brand colour drew the eye to the least
+          interesting fact on the card. */}
+      <div className="border-border/60 mt-5 flex items-center justify-between gap-3 border-t pt-3.5">
+        <span className="text-muted-foreground font-mono text-xs tabular-nums">
           {education.years}
         </span>
-        <span className="inline-flex items-center gap-1.5 text-xs font-medium text-signal">
-          <span aria-hidden className="size-1.5 rounded-full bg-primary" />
-          Graduated {education.graduated}
-        </span>
+        <span className="text-muted-foreground text-xs font-medium">Graduated</span>
       </div>
     </div>
   )

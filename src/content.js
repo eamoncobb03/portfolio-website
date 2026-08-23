@@ -47,12 +47,11 @@ export const roles = [
   { title: 'Web Developer Intern', org: 'BlackToe Running', year: '2023', highlights: [] },
 ]
 
-// Closes out the Experience section rather than getting its own. `graduated`
-// is separate from `years` so the card can say it's finished without anything
-// having to parse the range.
+// Closes out the Experience section rather than getting its own. The card says
+// "Graduated" as a plain label, so the finishing year only needs to exist once,
+// as the back half of the range.
 export const education = {
   years: '2022 – 2026',
-  graduated: '2026',
   degree: 'BSc Honours, Mathematics',
   school: 'Queen’s University',
   location: 'Kingston, ON',
