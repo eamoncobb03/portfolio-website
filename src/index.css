@@ -675,13 +675,97 @@
     will-change: transform;
   }
 
+  /* Three bars that fold into a cross. Positioned from the centre with
+     translate, so both states are symmetric and the rotation has nothing to
+     correct for. The open state animates rather than transitions, because the
+     cross is mounted with the panel and an animation is what plays on mount. */
+  .menu-glyph {
+    position: relative;
+    display: block;
+    width: 1.15rem;
+    height: 1.15rem;
+  }
+
+  .menu-glyph span {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    display: block;
+    width: 1.15rem;
+    height: 1.6px;
+    margin-left: -0.575rem;
+    border-radius: 2px;
+    background: currentColor;
+    transition:
+      transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 180ms ease;
+  }
+
+  .menu-glyph span:nth-child(1) {
+    transform: translateY(-6px);
+  }
+  .menu-glyph span:nth-child(2) {
+    transform: translateY(0);
+  }
+  .menu-glyph span:nth-child(3) {
+    transform: translateY(6px);
+  }
+
+  .menu-glyph[data-open] span:nth-child(1) {
+    animation: bar-to-x-top 380ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .menu-glyph[data-open] span:nth-child(2) {
+    animation: bar-fade 200ms ease both;
+  }
+  .menu-glyph[data-open] span:nth-child(3) {
+    animation: bar-to-x-bottom 380ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  @keyframes bar-to-x-top {
+    from {
+      transform: translateY(-6px) rotate(0deg);
+    }
+    to {
+      transform: translateY(0) rotate(45deg);
+    }
+  }
+
+  @keyframes bar-to-x-bottom {
+    from {
+      transform: translateY(6px) rotate(0deg);
+    }
+    to {
+      transform: translateY(0) rotate(-45deg);
+    }
+  }
+
+  @keyframes bar-fade {
+    to {
+      opacity: 0;
+      transform: scaleX(0.3);
+    }
+  }
+
   /* ── Mobile menu ────────────────────────────────────────────────────────
      Numbered like the section rules so the panel reads as part of the same
      document. Rows arrive one after another off --i rather than an inline
      delay each, which keeps the stagger in one place. */
+  /* A floating panel rather than a full-height slab against the edge: the
+     inset is what lets the corners actually read as rounded, and the shadow
+     gives it somewhere to sit above the page. */
   .menu-panel {
-    background: color-mix(in oklch, var(--popover) 88%, transparent);
-    backdrop-filter: blur(16px);
+    background: color-mix(in oklch, var(--popover) 92%, transparent);
+    backdrop-filter: blur(20px);
+    box-shadow:
+      0 24px 60px -12px rgb(0 0 0 / 0.45),
+      0 0 0 1px var(--glow-line);
+  }
+
+  /* The overlay darkens more than the shared default, so the page behind reads
+     as pushed back rather than merely tinted. */
+  .menu-panel + *,
+  [data-slot='sheet-overlay'] {
+    background: rgb(6 8 11 / 0.45);
   }
 
   .menu-item {

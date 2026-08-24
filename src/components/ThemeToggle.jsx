@@ -9,16 +9,18 @@ export default function ThemeToggle() {
   return (
     <Button
       variant="ghost"
-      size="icon-sm"
+      size="icon-lg"
       // The event is forwarded so the wipe can open from the press point.
       onClick={toggle}
       aria-label={`Switch to ${next} theme`}
-      className="glow-hover relative"
+      // Matched to the menu button beside it, and both sized for a thumb
+      // rather than a cursor.
+      className="glow-hover relative size-10"
     >
       {/* Both icons are always mounted and cross-rotate, so the swap is a
           movement rather than one glyph blinking out and another in. */}
-      <SunIcon className="theme-icon" data-shown={theme === 'dark'} />
-      <MoonIcon className="theme-icon absolute" data-shown={theme === 'light'} />
+      <SunIcon className="theme-icon size-[1.15rem]" data-shown={theme === 'dark'} />
+      <MoonIcon className="theme-icon absolute size-[1.15rem]" data-shown={theme === 'light'} />
     </Button>
   )
 }

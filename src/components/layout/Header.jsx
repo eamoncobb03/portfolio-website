@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { ArrowUpRightIcon, MenuIcon } from 'lucide-react'
+import { ArrowUpRightIcon } from 'lucide-react'
+import MenuIcon from '@/components/MenuIcon'
 import { Button } from '@/components/ui/button'
 import {
   Sheet,
@@ -74,25 +75,54 @@ export default function Header() {
 
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild className="md:hidden">
-              <Button variant="ghost" size="icon-sm" aria-label="Open menu" className="glow-hover">
+              <Button variant="ghost" size="icon-lg" aria-label="Open menu" className="glow-hover size-10">
                 <MenuIcon />
               </Button>
             </SheetTrigger>
 
-            <SheetContent side="right" className="menu-panel w-[min(20rem,85vw)] gap-0">
-              <SheetHeader className="pb-2">
+            {/* The side variants set inset, height and width through
+                data-[side=right] selectors, which outrank plain utilities, so
+                the overrides that lift this into a floating rounded panel have
+                to carry the same prefix to replace them rather than pile on
+                top. showCloseButton is off because the trigger itself is now
+                the close control. */}
+            <SheetContent
+              side="right"
+              showCloseButton={false}
+              className="menu-panel gap-0 data-[side=right]:inset-y-3 data-[side=right]:right-3 data-[side=right]:h-auto data-[side=right]:w-[min(19rem,82vw)] data-[side=right]:rounded-2xl data-[side=right]:border"
+            >
+              {/* Laid out like the header itself, wordmark left and the
+                  control right, so the cross lands where the hamburger was and
+                  the swap reads as one button changing rather than two. The
+                  glyph mounts with the panel, so its bars fold into the cross
+                  as the panel arrives. */}
+              <SheetHeader className="flex-row items-center justify-between gap-3 pb-2">
                 <SheetTitle asChild>
                   <SheetClose asChild>
                     <Wordmark className="text-base" />
                   </SheetClose>
                 </SheetTitle>
+
+                <SheetClose asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon-lg"
+                    aria-label="Close menu"
+                    className="glow-hover -mr-1 size-10 shrink-0"
+                  >
+                    <MenuIcon open />
+                  </Button>
+                </SheetClose>
               </SheetHeader>
 
               {/* Numbered to match the 01 / 02 rules the sections carry, so the
                   menu reads as the same document rather than a separate list.
                   Each row carries its index so the stagger below can key off
                   it in CSS instead of an inline delay per item. */}
-              <nav aria-label="Sections" className="flex flex-col gap-1 px-3 pt-2">
+              {/* Centred in whatever space is left between the wordmark and
+                  the footer, rather than stacked at the top with a void under
+                  it on a tall phone. */}
+              <nav aria-label="Sections" className="flex flex-1 flex-col justify-center gap-1 px-3">
                 {nav.map((item, i) => (
                   <SheetClose asChild key={item.id}>
                     <a
