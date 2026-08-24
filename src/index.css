@@ -480,18 +480,6 @@
     );
   }
 
-  /* A highlighter stroke behind a word: a background band sized and
-     positioned to sit under the lower half of the glyphs, the way a real
-     highlighter misses the ascenders. A background-image rather than a
-     pseudo-element, so there's no z-index stacking to get wrong. */
-  .highlight-mark {
-    background-image: linear-gradient(var(--highlight), var(--highlight));
-    background-repeat: no-repeat;
-    background-size: 100% 0.34em;
-    background-position: 0 90%;
-    padding-inline: 0.04em;
-  }
-
   /* ── Glow system ────────────────────────────────────────────────────────
      Applied off the classes the components already use rather than by hand,
      one component at a time. A lit accent here and an unlit one two sections
@@ -579,7 +567,7 @@
 
   /* The marker stroke under the surname, and the one the wordmark draws on
      hover, both sit under bright text and can carry a soft bloom. */
-  .dark :is(.highlight-mark, .highlight-sweep, .highlight-hover) {
+  .dark :is(.highlight-sweep, .highlight-hover) {
     filter: drop-shadow(0 1px 6px rgb(244 207 58 / 0.25));
   }
 
@@ -801,22 +789,42 @@
      The marker stroke is swept on after the name has settled. Animating
      background-size rather than a width keeps it a paint-only change on an
      element that is already there. */
-  .highlight-sweep {
+  /* A highlighter stroke behind a word: a background band sized and
+     positioned to sit under the lower half of the glyphs, the way a real
+     highlighter misses the ascenders. A background-image rather than a
+     pseudo-element, so there's no z-index stacking to get wrong.
+
+     Both variants start at no width and grow to full, and differ only in what
+     drives that: the hero's draws itself once the name has landed, the
+     wordmark's follows the pointer. */
+  .highlight-sweep,
+  .highlight-hover {
     background-image: linear-gradient(var(--highlight), var(--highlight));
     background-repeat: no-repeat;
     background-size: 0% 0.34em;
     background-position: 0 90%;
     padding-inline: 0.04em;
+  }
+
+  .highlight-sweep {
     animation: highlight-draw 620ms cubic-bezier(0.22, 1, 0.36, 1) 620ms both;
   }
 
+  /* No `from`: the shared rule above is already the start state. */
   @keyframes highlight-draw {
-    from {
-      background-size: 0% 0.34em;
-    }
     to {
       background-size: 100% 0.34em;
     }
+  }
+
+  /* The wordmark's copy of the stroke, drawn by the pointer instead. */
+  .highlight-hover {
+    transition: background-size 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .group:hover .highlight-hover,
+  .highlight-hover:hover {
+    background-size: 100% 0.34em;
   }
 
   /* Lands last, as the full stop on the sequence. */
@@ -834,23 +842,6 @@
       opacity: 1;
       transform: scale(1);
     }
-  }
-
-  /* The same stroke, painted on from the left on hover. Sized from 0 rather
-     than faded in, so it reads as a marker being drawn rather than a block
-     appearing. */
-  .highlight-hover {
-    background-image: linear-gradient(var(--highlight), var(--highlight));
-    background-repeat: no-repeat;
-    background-size: 0% 0.34em;
-    background-position: 0 90%;
-    padding-inline: 0.04em;
-    transition: background-size 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  .group:hover .highlight-hover,
-  .highlight-hover:hover {
-    background-size: 100% 0.34em;
   }
 
   /* Engineering-paper grid on the page ground. Static and paint-only: no
