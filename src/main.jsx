@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/react'
 import { ThemeProvider } from '@/context/ThemeContext'
-import { Toaster } from '@/components/ui/sonner'
 import App from '@/App'
 import NotFound from '@/pages/NotFound'
 import '@/index.css'
@@ -26,7 +25,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <ThemeProvider>
       <Page />
-      <Toaster position="bottom-right" />
     </ThemeProvider>
     <Analytics />
     <SpeedInsights />

@@ -13,7 +13,7 @@ export default function App() {
       <div aria-hidden className="grid-ground" />
 
       <a
-        href="#experience"
+        href="#main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-60 focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:text-primary-foreground"
       >
         Skip to content
@@ -22,7 +22,7 @@ export default function App() {
       <Header />
       <Hero />
 
-      <main>
+      <main id="main-content" tabIndex={-1} className="focus:outline-none focus-visible:shadow-none">
         <Section id="experience" index={1} label="Experience" title="My professional experience.">
           <Experience />
         </Section>

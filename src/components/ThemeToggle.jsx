@@ -10,7 +10,6 @@ export default function ThemeToggle() {
     <Button
       variant="ghost"
       size="icon-lg"
-      // The event is forwarded so the wipe can open from the press point.
       onClick={toggle}
       aria-label={`Switch to ${next} theme`}
       // Matched to the menu button beside it, and both sized for a thumb

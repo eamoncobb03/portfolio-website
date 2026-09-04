@@ -6,7 +6,6 @@ import {
   Sheet,
   SheetClose,
   SheetContent,
-  SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
@@ -24,7 +23,7 @@ function Wordmark({ className }) {
   const toTop = (event) => {
     if (event.metaKey || event.ctrlKey || event.shiftKey) return
     event.preventDefault()
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' })
   }
 
   return (
@@ -43,13 +42,14 @@ function Wordmark({ className }) {
 
 export default function Header() {
   const [open, setOpen] = useState(false)
-  const { progress, scrolled, active } = useHeaderState(SECTION_IDS)
+  const { progressRef, scrolled, active } = useHeaderState(SECTION_IDS)
+  const activeLabel = nav.find((item) => item.id === active)?.label ?? 'Portfolio'
 
   return (
     <header
       data-glow
       data-scrolled={scrolled || undefined}
-      className="fixed inset-x-0 top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-md transition-shadow duration-500 data-scrolled:shadow-[0_1px_0_0_var(--glow-line),0_8px_30px_-12px_var(--glow-cast)]"
+      className="site-header fixed inset-x-0 top-0 z-[60] border-b border-border/60 bg-background"
     >
       <Container className="flex h-16 items-center justify-between gap-6">
         <Wordmark className="text-base" />
@@ -73,62 +73,45 @@ export default function Header() {
         <div className="flex items-center gap-1">
           <ThemeToggle />
 
-          <Sheet open={open} onOpenChange={setOpen}>
-            <SheetTrigger asChild className="md:hidden">
-              <Button variant="ghost" size="icon-lg" aria-label="Open menu" className="glow-hover size-10">
-                <MenuIcon />
+          <Sheet modal={false} open={open} onOpenChange={setOpen}>
+            <SheetTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon-lg"
+                aria-label={open ? 'Close menu' : 'Open menu'}
+                aria-expanded={open}
+                className="menu-trigger glow-hover size-10 md:hidden"
+              >
+                <MenuIcon open={open} />
               </Button>
             </SheetTrigger>
 
-            {/* The side variants set inset, height and width through
-                data-[side=right] selectors, which outrank plain utilities, so
-                the overrides that lift this into a floating rounded panel have
-                to carry the same prefix to replace them rather than pile on
-                top. showCloseButton is off because the trigger itself is now
-                the close control. */}
             <SheetContent
               side="right"
               showCloseButton={false}
-              className="menu-panel gap-0 data-[side=right]:inset-y-3 data-[side=right]:right-3 data-[side=right]:h-auto data-[side=right]:w-[min(19rem,82vw)] data-[side=right]:rounded-2xl data-[side=right]:border"
+              aria-describedby={undefined}
+              overlayClassName="menu-overlay pointer-events-none z-40"
+              className="menu-panel gap-0 overflow-y-auto p-2 data-[side=right]:inset-y-auto data-[side=right]:top-[4.75rem] data-[side=right]:right-4 data-[side=right]:h-auto data-[side=right]:max-h-[calc(100svh-5.75rem)] data-[side=right]:w-[min(21rem,calc(100vw-2rem))] data-[side=right]:rounded-2xl data-[side=right]:border data-[side=right]:sm:max-w-[21rem]"
             >
-              {/* Laid out like the header itself, wordmark left and the
-                  control right, so the cross lands where the hamburger was and
-                  the swap reads as one button changing rather than two. The
-                  glyph mounts with the panel, so its bars fold into the cross
-                  as the panel arrives. */}
-              <SheetHeader className="flex-row items-center justify-between gap-3 pb-2">
-                <SheetTitle asChild>
-                  <SheetClose asChild>
-                    <Wordmark className="text-base" />
-                  </SheetClose>
-                </SheetTitle>
+              <SheetTitle className="sr-only">Site navigation</SheetTitle>
 
-                <SheetClose asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon-lg"
-                    aria-label="Close menu"
-                    className="glow-hover -mr-1 size-10 shrink-0"
-                  >
-                    <MenuIcon open />
-                  </Button>
-                </SheetClose>
-              </SheetHeader>
+              <div className="menu-panel-heading">
+                <div>
+                  <span className="menu-panel-eyebrow">Navigate</span>
+                  <p className="menu-panel-title">{activeLabel}</p>
+                </div>
+                <span className="menu-panel-count">
+                  {String(nav.length).padStart(2, '0')} sections
+                </span>
+              </div>
 
-              {/* Numbered to match the 01 / 02 rules the sections carry, so the
-                  menu reads as the same document rather than a separate list.
-                  Each row carries its index so the stagger below can key off
-                  it in CSS instead of an inline delay per item. */}
-              {/* Centred in whatever space is left between the wordmark and
-                  the footer, rather than stacked at the top with a void under
-                  it on a tall phone. */}
-              <nav aria-label="Sections" className="flex flex-1 flex-col justify-center gap-1 px-3">
+              <nav aria-label="Sections" className="menu-nav">
                 {nav.map((item, i) => (
                   <SheetClose asChild key={item.id}>
                     <a
                       href={`#${item.id}`}
+                      aria-current={active === item.id ? 'location' : undefined}
                       data-active={active === item.id || undefined}
-                      style={{ '--i': i }}
                       className="menu-item"
                     >
                       <span className="menu-item-index">
@@ -141,12 +124,14 @@ export default function Header() {
                 ))}
               </nav>
 
-              <div className="mt-auto px-3 pb-4" style={{ '--i': nav.length }}>
-                <span aria-hidden className="menu-rule" />
+              <div className="menu-footer">
                 <a href={`mailto:${site.email}`} className="menu-footer-link">
-                  {site.email}
+                  <span className="menu-footer-copy">
+                    <span className="menu-footer-kicker">Get in touch</span>
+                    <span className="menu-footer-email">{site.email}</span>
+                  </span>
+                  <ArrowUpRightIcon className="menu-footer-arrow" />
                 </a>
-                <p className="mt-1 text-xs text-muted-foreground">{site.location}</p>
               </div>
             </SheetContent>
           </Sheet>
@@ -156,7 +141,7 @@ export default function Header() {
       {/* Sits on the header's own bottom edge, so it reads as the bar filling
           rather than a separate strip of UI. Scaled from the left instead of
           animating width, which keeps it off the layout path entirely. */}
-      <div aria-hidden className="scroll-progress" style={{ '--p': progress }} />
+      <div ref={progressRef} aria-hidden className="scroll-progress" />
     </header>
   )
 }
