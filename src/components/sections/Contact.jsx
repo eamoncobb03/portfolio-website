@@ -76,7 +76,7 @@ function ContactCard({ icon: Icon, label, value, href, external, brand, action }
       // The brand colour is scoped to the card as a variable so the icon, its
       // tile tint and the hover border all read from one value.
       style={{ '--brand': `var(${brand})` }}
-      className="glow-card group relative flex items-center gap-3.5 rounded-xl border border-border bg-(--brand)/35 p-4 transition-all duration-300 hover:-translate-y-1 hover:border-(--brand) hover:bg-(--brand)/50"
+      className="glow-card group relative flex w-full min-w-0 items-center gap-3.5 rounded-xl border border-border bg-(--brand)/35 p-4 transition-all duration-300 hover:-translate-y-1 hover:border-(--brand) hover:bg-(--brand)/50"
     >
       <span className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-(--brand)/30 bg-background text-(--brand)">
         <Icon className="size-[1.15rem]" />
@@ -104,8 +104,8 @@ function ContactCard({ icon: Icon, label, value, href, external, brand, action }
 
 export default function Contact() {
   return (
-    <div className="grid gap-3 md:grid-cols-3">
-      <Reveal>
+    <div className="grid min-w-0 gap-3 md:grid-cols-3">
+      <Reveal className="min-w-0">
         <ContactCard
           icon={TbMail}
           label="Email"
@@ -116,7 +116,7 @@ export default function Contact() {
         />
       </Reveal>
 
-      <Reveal delay={70}>
+      <Reveal delay={70} className="min-w-0">
         <ContactCard
           icon={TbBrandLinkedin}
           label="LinkedIn"
@@ -127,7 +127,7 @@ export default function Contact() {
         />
       </Reveal>
 
-      <Reveal delay={140}>
+      <Reveal delay={140} className="min-w-0">
         <ContactCard
           icon={TbBrandGithub}
           label="GitHub"

@@ -6,14 +6,15 @@ import TiltCard from '@/components/TiltCard'
 import { currentProject, site } from '@/content'
 
 function CurrentProjectCard() {
-  const live = currentProject?.href
-  const external = live && currentProject.href.startsWith('http')
+  const project = currentProject
+  const live = project?.href
+  const external = live && project.href.startsWith('http')
 
   // When there's somewhere to go, the card *is* the link. That beats laying a
   // stretched anchor over a transformed element, where the clickable area and
   // the painted card drift apart as the card tilts.
   const linkProps = live
-    ? { as: 'a', href: currentProject.href, ...(external && { target: '_blank', rel: 'noreferrer' }) }
+    ? { as: 'a', href: project.href, ...(external && { target: '_blank', rel: 'noreferrer' }) }
     : {}
 
   return (
@@ -24,23 +25,23 @@ function CurrentProjectCard() {
       <div className="flex items-center gap-2.5">
         <span aria-hidden className="pulse-dot size-1.5 rounded-full bg-primary" />
         <span className="text-xs font-medium tracking-[0.1em] text-muted-foreground uppercase">
-          Current project
+          {project ? 'Current project' : 'Next project'}
         </span>
       </div>
 
       <p className="mt-4 flex items-start justify-between gap-3 text-xl font-semibold tracking-[-0.01em]">
-        {currentProject.title}
+        {project?.title ?? 'More work is on the way.'}
         {live && (
           <ArrowUpRightIcon className="mt-1 size-4 shrink-0 text-muted-foreground transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-signal" />
         )}
       </p>
 
       <p className="mt-2 text-sm leading-relaxed text-muted-foreground text-pretty">
-        {currentProject.blurb}
+        {project?.blurb ?? 'There is no active project to share right now. Check back soon.'}
       </p>
 
       <p className="mt-5 text-xs font-medium tracking-[0.06em] text-signal uppercase">
-        {live ? 'View project' : currentProject.status}
+        {live ? 'View project' : (project?.status ?? 'Coming soon')}
       </p>
     </TiltCard>
   )

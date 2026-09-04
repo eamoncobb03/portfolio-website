@@ -97,11 +97,11 @@ export default function Header() {
                   glyph mounts with the panel, so its bars fold into the cross
                   as the panel arrives. */}
               <SheetHeader className="flex-row items-center justify-between gap-3 pb-2">
-                <SheetTitle asChild>
-                  <SheetClose asChild>
-                    <Wordmark className="text-base" />
-                  </SheetClose>
-                </SheetTitle>
+                <SheetTitle className="sr-only">Site navigation</SheetTitle>
+
+                <SheetClose asChild>
+                  <Wordmark className="text-base" />
+                </SheetClose>
 
                 <SheetClose asChild>
                   <Button
