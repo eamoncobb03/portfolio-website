@@ -1,7 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ArrowUpRightIcon, CheckIcon, CopyIcon } from 'lucide-react'
 import { TbBrandGithub, TbBrandLinkedin, TbMail } from 'react-icons/tb'
-import { toast } from 'sonner'
 import Reveal from '@/components/Reveal'
 import { site } from '@/content'
 
@@ -38,35 +37,40 @@ async function writeToClipboard(text) {
 
 function CopyEmail() {
   const [copied, setCopied] = useState(false)
+  const [message, setMessage] = useState('')
+  const timer = useRef(null)
+  useEffect(() => () => clearTimeout(timer.current), [])
 
   const copy = async () => {
     if (await writeToClipboard(site.email)) {
       setCopied(true)
-      toast('Copied to clipboard', { description: site.email, duration: 2000 })
-      // Only the icon has a resting state to return to; the confirmation
-      // itself is the toast's own concern once it's shown, not this
-      // component's, so there's no timer here undoing it.
-      setTimeout(() => setCopied(false), 2000)
+      setMessage('Email copied')
+      clearTimeout(timer.current)
+      timer.current = setTimeout(() => {
+        setCopied(false)
+        setMessage('')
+      }, 2000)
+    } else {
+      setMessage('Could not copy. Select the email address to copy it manually.')
     }
-    // If both paths fail nothing changes, and the card's own mailto link
-    // still works. Nothing to recover from.
   }
 
   return (
-    <button
-      type="button"
-      onClick={copy}
-      aria-label="Copy email address"
-      // z-10 lifts this above the card's stretched link, so the button is
-      // clickable rather than opening the mail client.
-      className="relative z-10 rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-    >
-      {copied ? (
-        <CheckIcon className="size-4 text-signal" />
-      ) : (
-        <CopyIcon className="size-4" />
-      )}
-    </button>
+    <span className="relative z-10 shrink-0">
+      <button
+        type="button"
+        onClick={copy}
+        aria-label="Copy email address"
+        className="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+      >
+        {copied ? (
+          <CheckIcon className="size-4 text-signal" />
+        ) : (
+          <CopyIcon className="size-4" />
+        )}
+      </button>
+      <span role="status" className={copied ? 'copy-feedback' : 'sr-only'}>{message}</span>
+    </span>
   )
 }
 
@@ -76,7 +80,7 @@ function ContactCard({ icon: Icon, label, value, href, external, brand, action }
       // The brand colour is scoped to the card as a variable so the icon, its
       // tile tint and the hover border all read from one value.
       style={{ '--brand': `var(${brand})` }}
-      className="glow-card group relative flex w-full min-w-0 items-center gap-3.5 rounded-xl border border-border bg-(--brand)/35 p-4 transition-all duration-300 hover:-translate-y-1 hover:border-(--brand) hover:bg-(--brand)/50"
+      className="glow-card group relative flex w-full min-w-0 items-center gap-3.5 rounded-xl border border-border bg-card p-4"
     >
       <span className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-(--brand)/30 bg-background text-(--brand)">
         <Icon className="size-[1.15rem]" />

@@ -2,7 +2,6 @@ import { ArrowRightIcon, ArrowUpRightIcon, ChevronDownIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Container from '@/components/layout/Container'
 import Reveal from '@/components/Reveal'
-import TiltCard from '@/components/TiltCard'
 import { currentProject, site } from '@/content'
 
 function CurrentProjectCard() {
@@ -10,24 +9,27 @@ function CurrentProjectCard() {
   const live = project?.href
   const external = live && project.href.startsWith('http')
 
-  // When there's somewhere to go, the card *is* the link. That beats laying a
-  // stretched anchor over a transformed element, where the clickable area and
-  // the painted card drift apart as the card tilts.
+  const Tag = live ? 'a' : 'div'
   const linkProps = live
-    ? { as: 'a', href: project.href, ...(external && { target: '_blank', rel: 'noreferrer' }) }
+    ? { href: project.href, ...(external && { target: '_blank', rel: 'noreferrer' }) }
     : {}
 
   return (
-    <TiltCard
+    <Tag
       {...linkProps}
-      className="glow-card rounded-2xl border border-(--tilt-border) bg-card p-6"
+      className="glow-card feature-card group block rounded-2xl border border-border bg-card p-6"
     >
       <div className="flex items-center gap-2.5">
-        <span aria-hidden className="pulse-dot size-1.5 rounded-full bg-primary" />
+        <span aria-hidden className="status-light size-1.5 rounded-full bg-primary" />
         <span className="text-xs font-medium tracking-[0.1em] text-muted-foreground uppercase">
           {project ? 'Current project' : 'Next project'}
         </span>
       </div>
+
+      <svg aria-hidden="true" className="feature-trace" viewBox="0 0 320 48" fill="none">
+        <path className="feature-trace-guide" d="M0 40H320M0 16H320" />
+        <path className="feature-trace-line" pathLength="1" d="M0 36H62L86 28L112 32L148 14L176 22L218 8L248 16L282 4H320" />
+      </svg>
 
       <p className="mt-4 flex items-start justify-between gap-3 text-xl font-semibold tracking-[-0.01em]">
         {project?.title ?? 'More work is on the way.'}
@@ -43,7 +45,7 @@ function CurrentProjectCard() {
       <p className="mt-5 text-xs font-medium tracking-[0.06em] text-signal uppercase">
         {live ? 'View project' : (project?.status ?? 'Coming soon')}
       </p>
-    </TiltCard>
+    </Tag>
   )
 }
 
@@ -58,35 +60,26 @@ export default function Hero() {
             </p>
           </Reveal>
 
-          {/* Each line wipes up from behind its own clip, one after the other,
-              which is why the name is split across two Reveals rather than
-              being one block with a <br>.
-
-              The highlight under the surname is drawn on afterwards rather than
-              arriving with it: the stroke sweeps left to right once the line
-              has settled, so it reads as the name being marked rather than as
-              text that happened to come with a yellow box behind it. Its delay
-              is the sum of the ones above it, which is why it is spelled out
-              here instead of being another Reveal. */}
+          {/* Short, staggered line reveals share the section entrance timing. */}
           <h1 className="mt-5 text-[clamp(3.25rem,9vw,7rem)] leading-[0.92] font-bold tracking-[-0.045em]">
-            <Reveal variant="mask" delay={90}>
+            <Reveal variant="mask" delay={50}>
               {site.firstName}
             </Reveal>
-            <Reveal variant="mask" delay={180}>
+            <Reveal variant="mask" delay={100}>
               <span className="highlight-sweep">{site.lastName}</span>
               <span className="text-signal hero-dot">.</span>
             </Reveal>
           </h1>
 
-          <Reveal delay={420}>
+          <Reveal delay={140}>
             <p className="mt-6 max-w-md text-lg leading-relaxed text-muted-foreground text-pretty">
               {site.bio}
             </p>
           </Reveal>
 
-          <Reveal delay={520}>
+          <Reveal delay={180}>
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button asChild size="lg" className="group/cta h-11 px-5">
+              <Button asChild size="lg" className="hero-cta group/cta h-11 px-5">
                 <a href="#experience">
                   See experience
                   <ArrowRightIcon
@@ -103,7 +96,7 @@ export default function Hero() {
           </Reveal>
         </div>
 
-        <Reveal variant="scale" delay={640}>
+        <Reveal delay={220}>
           <CurrentProjectCard />
         </Reveal>
       </Container>
@@ -114,7 +107,7 @@ export default function Hero() {
         className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-muted-foreground transition-colors hover:text-signal md:flex"
       >
         <span className="text-xs tracking-[0.16em] uppercase">Scroll</span>
-        <ChevronDownIcon className="size-4 animate-bounce" />
+        <ChevronDownIcon className="scroll-cue-icon size-4" />
       </a>
     </section>
   )

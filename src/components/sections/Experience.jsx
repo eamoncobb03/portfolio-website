@@ -13,13 +13,12 @@ function SubHeading({ children }) {
 function Row({ year, title, org, current, highlights }) {
   return (
     <div className="timeline-row group relative pl-10">
-      {/* The node sits on the spine. The current role gets a halo that pulses,
-          so the eye lands on where he is now before reading back through. */}
+      {/* A steady neon halo identifies the current role. */}
       <span
         aria-hidden
         className={`absolute top-1 left-0 size-3.5 -translate-x-1/2 rounded-full border-2 transition-colors duration-300 ${
           current
-            ? 'pulse-ring border-primary bg-primary'
+            ? 'current-node border-primary bg-primary'
             : 'border-border bg-card group-hover:border-signal'
         }`}
         style={{ left: '0.4375rem' }}
